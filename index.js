@@ -14,9 +14,10 @@ app.use(cors());
 // Enable file uploads
 app.use(fileUpload());
 app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', "font-src 'self' https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com;");
+  res.setHeader('Content-Security-Policy', "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com;");
   next();
 });
+
 // Initialize Google Generative AI
 const genAI = new GoogleGenerativeAI("AIzaSyD8lt6NXXNklYRfzIx5WJNk8iQimjb5MsU");
 
@@ -44,7 +45,7 @@ app.post("/check", async (req, res) => {
   pythonProcess.on("close", async (code) => {
     if (code === 0) {
       const prompt = `
-      Act as an expert Application Tracking System (ATS) specializing in the tech field, encompassing software engineering, data science, data analysis, and big data engineering. Your objective is to assess the resume provided in ${appdata} against the given job description in ${jobDescription}. Identify missing keywords accurately in resume and list them in a structured format. The response should be presented in bullet points, numbered 1, 2, 3, 4, etc., following this structure: {{"MissingKeywords: 1, 2, 3, 4, ..."}}. Omit any details regarding match percentages and profile summaries.`
+      Act as an expert Application Tracking System (ATS) specializing in the tech field, encompassing software engineering, data science, data analysis, and big data engineering. Your objective is to assess the resume provided in ${appdata} against the given job description in ${jobDescription}. Identify missing keywords accurately in resume and list them in a structured format. The response should be presented in bullet points, numbered 1, 2, 3, 4, etc., following this structure: {{"MissingKeywords: 1, 2, 3, 4, ..."}}. Omit any details regarding match percentages and profile summaries. If you find the provided document does not meet the criteria of a resume, please reply with 'Invalid Resume'.`
       
       try {
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
