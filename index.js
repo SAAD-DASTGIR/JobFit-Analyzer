@@ -12,11 +12,11 @@ const PORT = 5000;
 app.use(cors());
 
 // Enable file uploads
-app.use(fileUpload());
 app.use((req, res, next) => {
   res.setHeader('Content-Security-Policy', "default-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com;");
   next();
 });
+app.use(fileUpload());
 
 // Initialize Google Generative AI
 const genAI = new GoogleGenerativeAI("AIzaSyD8lt6NXXNklYRfzIx5WJNk8iQimjb5MsU");
